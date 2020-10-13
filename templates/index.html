@@ -1,0 +1,491 @@
+{% load static %}
+{% load i18n %}
+{% load notifications_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Sist-Prod | v.1</title>
+    <link rel="shortcut icon" href="{% static 'assets/dist/img/default-150x150.png' %}" type="image/x-icon">
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/fontawesome-free/css/all.min.css' %}">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="{% static 'assets/dist/css/ionicons.min.css' %}">
+
+    <link rel="stylesheet" href="{% static 'assets/plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/select2/css/select2.min.css' %}">
+    <!-- Toastr -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/toastr/toastr.min.css' %}">
+    <!-- Tempusdominus Bbootstrap 4 -->
+    <link rel="stylesheet"
+          href="{% static 'assets/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}">
+    <!-- JQVMap -->
+    {#    <link rel="stylesheet" href="{% static 'assets/plugins/jqvmap/jqvmap.min.css' %}">#}
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{% static 'assets/dist/css/adminlte.min.css' %}">
+    <!-- overlayScrollbars -->
+    <link rel="stylesheet" href="{% static 'assets/plugins/overlayScrollbars/css/OverlayScrollbars.min.css' %}">
+    <!-- Daterange picker -->
+    {#    <link rel="stylesheet" href="{% static 'assets/plugins/daterangepicker/daterangepicker.css' %}">#}
+    <!-- summernote -->
+    {#    <link rel="stylesheet" href="{% static 'assets/plugins/summernote/summernote-bs4.css' %}">#}
+    <!-- Google Font: Source Sans Pro -->
+    <link href="{% static 'assets/dist/css/font.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'assets/plugins/datatables-bs4/css/dataTables.bootstrap4.css' %}">
+    {% block miestilo %}
+
+    {% endblock %}
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-blue navbar-dark navbar-primary">
+        <!-- Left navbar links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="{% url 'inicio' %}" class="nav-link">Inicio</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="{% url 'profile' request.user.pk %}" class="nav-link">Perfil</a>
+            </li>
+        </ul>
+
+        <!-- Right navbar links -->
+        <ul class="navbar-nav ml-auto">
+            <!-- Messages Dropdown Menu -->
+            <li class="nav-item dropdown">
+                {#                <a class="nav-link" data-toggle="dropdown" href="#">#}
+                {#                    <i class="fa fa-bell"></i>#}
+                {#                    <span class="badge badge-danger navbar-badge" id="notify_count">{% if count %}#}
+                {#                        {{ count }}{% endif %}</span>#}
+                {#                </a>#}
+                {#                <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">#}
+                {#                    <span class="dropdown-item dropdown-header" id="notify_header">#}
+                {#                        {% blocktrans %}Usted tiene{% endblocktrans %}#}
+                {#                        {{ count }}#}
+                {#                        {% blocktrans %}notificacion(es){% endblocktrans %}#}
+                {#                    </span>#}
+                {#                    <div id="notify_list">#}
+                {#                        {% for noti in notification %}#}
+                {#                            <div class="dropdown-divider"></div>#}
+                {#                            <a href="#" class="alert-{{ noti.level }} dropdown-item" name="{{ noti.id }}"#}
+                {#                               onclick="Notify_less_front({{ noti.id }})">#}
+                {#                                <p><i class="fas fa-check mr-2"></i> {{ noti.verb }}</p>#}
+                {#                            </a>#}
+                {#                        {% endfor %}#}
+                {#                    </div>#}
+                {#                    <div class="dropdown-divider"></div>#}
+                {#                    <a href="#" id="eliminar_noty_all" class="dropdown-item dropdown-footer">#}
+                {#                        {% blocktrans %}Eliminar todas las notificaciones{% endblocktrans %}#}
+                {#                    </a>#}
+                {#                </div>#}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}" title="Salir">
+                    <i class="fas fa-arrow-right mr-2"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-light-red elevation-4">
+        <!-- Brand Logo -->
+        <a href="{% url 'inicio' %}" class="brand-link navbar-primary">
+            <img src="{% static 'assets/dist/img/default-150x150.png' %}" alt="AdminLTE Logo"
+                 class="brand-image img-circle elevation-2"
+                 style="opacity: .8; background-color: white">
+            <span class="brand-text font-weight-light" style="color: white">Sitio Bodega</span>
+        </a>
+
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Sidebar user panel (optional) -->
+            <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div class="image">
+                    {% if userPhoto %}
+                        <img src="/{{ userPhoto }}" class="img-circle elevation-2" alt="User Image">
+                    {% else %}
+                        <img src="{% static 'users/userDefault4.png' %}" class="img-circle elevation-2" alt="User Image"
+                             title="Sube tu foto">
+                    {% endif %}
+                </div>
+                <div class="info">
+                    <a href="{% url 'profile' request.user.pk %}"
+                       class="d-block">{{ request.user.first_name }} {{ request.user.last_name }}</a>
+                </div>
+            </div>
+
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                    data-accordion="false">
+                    <!-- Add icons to the links using the .nav-icon class
+                         with font-awesome or any other icon font library -->
+                    <li class="nav-item">
+                        <a href="{% url 'inicio' %}" class="nav-link {% block inicio_active %}{% endblock %}">
+                            <i class="nav-icon fa fa-home"></i>
+                            <p class="text">Inicio</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'profile' request.user.pk %}"
+                           class="nav-link {% block perfil_active %}{% endblock %}">
+                            <i class="nav-icon far fa-user"></i>
+                            <p>Perfil</p>
+                        </a>
+                    </li>
+{#                {% if perms.auth.add_provincia %}#}
+                    <li class="nav-header">MENÚ NAVEGACIÓN</li>
+
+                        <li class="nav-item has-treeview {% block menu_gestion %}{% endblock %}">
+                            <a href="#" class="nav-link {% block menu_gestion_active %}{% endblock %}">
+                                <i class="nav-icon fa fa-book-reader"></i>
+                                <p>
+                                    Gestión
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'bodega_listar' %}"
+                                       class="nav-link {% block menu_bodega %}{% endblock %}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Bodega</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+{#                    {% endif %}#}
+{#                     {% if perms.auth.add_provincia %}#}
+                        <li class="nav-item has-treeview {% block menu_nomenclator %}{% endblock %}">
+                            <a href="#" class="nav-link {% block menu_nomenclator_active %}{% endblock %}">
+                                <i class="nav-icon fa fa-book-reader"></i>
+                                <p>
+                                    Nomencladores
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'provincia_listar' %}"
+                                       class="nav-link {% block menu_provincia %}{% endblock %}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Provincia</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'municipio_listar' %}"
+                                       class="nav-link {% block menu_municipio %}{% endblock %}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Municipio</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'consejo_listar' %}"
+                                       class="nav-link {% block menu_consejo %}{% endblock %}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Consejo Popular</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'zona_listar' %}"
+                                       class="nav-link {% block menu_zona %}{% endblock %}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Zona</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'clasificacion_listar' %}"
+                                       class="nav-link {% block menu_clasificacion %}{% endblock %}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Clasificación</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'unidad_medida_listar' %}"
+                                       class="nav-link {% block menu_unidad %}{% endblock %}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Unidad de Medida</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'tipo_operacion_listar' %}"
+                                       class="nav-link {% block menu_tipooperacion %}{% endblock %}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Tipo de Operación</p>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'producto_listar' %}"
+                                       class="nav-link {% block menu_producto %}{% endblock %}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Productos</p>
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </li>
+{#                    {% endif %}#}
+                 {% if perms.auth.add_user %}
+                    <li class="nav-header">Seguridad</li>
+
+                        <li class="nav-item has-treeview {% block menu_seguridad %}{% endblock %}">
+                            <a href="#" class="nav-link {% block menu_seguridad_active %}{% endblock %}">
+                                <i class="nav-icon fa fa-user-secret"></i>
+                                <p>
+                                    Seguridad
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{% url 'user_list' %}" class="nav-link {% block usuarios %}{% endblock %}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Usuarios</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                 {% if user.is_superuser %}
+                                    <a href="{% url 'group_list' %}" class="nav-link {% block grupo %}{% endblock %}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Grupos</p>
+                                    </a>
+                                       {% endif %}
+                                </li>
+
+
+                            </ul>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
+        </div>
+        <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        {% block wrapper %}
+            <div class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1 class="m-0 text-dark">Bienvenido!</h1>
+                        </div><!-- /.col -->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
+                            </ol>
+                        </div><!-- /.col -->
+                    </div><!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content-header -->
+        {% endblock %}
+        <!-- Main content -->
+        {% block content %}
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+
+                    </div>
+                    <!-- /.row (main row) -->
+                </div><!-- /.container-fluid -->
+            </section>
+        {% endblock %}
+
+        <!-- /.content -->
+    </div>
+
+
+    <!-- /.content-wrapper -->
+    <footer class="main-footer">
+        <strong>Infocap &copy; 2020 <a href="#">Sistema Bodega</a>.</strong>
+        Todos los derechos reservados.
+        <div class="float-right d-none d-sm-inline-block">
+            <b>Versión</b> 1.0
+        </div>
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+
+</div>
+
+<!-- jQuery -->
+<script src="{% static 'assets/plugins/jquery/jquery.min.js' %}"></script>
+<!-- jQuery UI 1.11.4 -->
+<script src="{% static 'assets/plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+<!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+<script>
+    $.widget.bridge('uibutton', $.ui.button)
+</script>
+<!-- Bootstrap 4 -->
+<script src="{% static 'assets/plugins/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'assets/plugins/select2/js/select2.full.min.js' %}"></script>
+
+<script src="{% static 'assets/plugins/sweetalert2/sweetalert2.min.js' %}"></script>
+<!-- Toastr -->
+<script src="{% static 'assets/plugins/toastr/toastr.min.js' %}"></script>
+<!-- ChartJS -->
+{#<script src="{% static 'assets/plugins/chart.js/Chart.min.js' %}"></script>#}
+<!-- Sparkline -->
+<script src="{% static 'assets/plugins/sparklines/sparkline.js' %}"></script>
+<!-- JQVMap -->
+{#<script src="{% static 'assets/plugins/jqvmap/jquery.vmap.min.js' %}"></script>#}
+{#<script src="{% static 'assets/plugins/jqvmap/maps/jquery.vmap.usa.js' %}"></script>#}
+<!-- jQuery Knob Chart -->
+<script src="{% static 'assets/plugins/jquery-knob/jquery.knob.min.js' %}"></script>
+<!-- daterangepicker -->
+<script src="{% static 'assets/plugins/moment/moment.min.js' %}"></script>
+{#<script src="{% static 'assets/plugins/daterangepicker/daterangepicker.js' %}"></script>#}
+
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="{% static 'assets/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js' %}"></script>
+<!-- Summernote -->
+{#<script src="{% static 'assets/plugins/summernote/summernote-bs4.min.js' %}"></script>#}
+<!-- overlayScrollbars -->
+<script src="{% static 'assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js' %}"></script>
+<!-- AdminLTE App -->
+<script src="{% static 'assets/dist/js/adminlte.js' %}"></script>
+
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="{% static 'assets/dist/js/pages/dashboard.js' %}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{% static 'assets/dist/js/demo.js' %}"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 5000
+        });
+        {% if messages %}
+            {% for message in messages %}
+                Toast.fire({
+                    type: '{{ message.tags }}',
+                    title: '{{ message }}',
+                });
+            {% endfor %}
+        {% endif %}
+    })
+</script>
+{#<script>#}
+{#    function Notify_less_front(id_noty) {#}
+{#        id_noty = parseInt(id_noty);#}
+{#        $.ajax({#}
+{#            url: '{% url "notificacion_read" 1 %}',#}
+{#            data: {'id': id_noty},#}
+{#            type: 'get',#}
+{#            success: function (data) {#}
+{#                var count = parseInt($('#notify_count').html()) - 1;#}
+{#                if (count == 0) {#}
+{#                    $('#notify_count').html("");#}
+{#                }#}
+{#                else {#}
+{#                    $('#notify_count').html(count);#}
+{#                }#}
+{##}
+{#                $('#notify_header').html("{% trans 'Usted tiene' %}" +#}
+{#                    " " + count + " " +#}
+{#                    "{% trans 'notificacione(s)' %}")#}
+{#                $('#notify_list').html(data);#}
+{#            }#}
+{##}
+{#        })#}
+{#    }#}
+{##}
+{#    $('#eliminar_noty_all').on("click", function () {#}
+{#        $.ajax({#}
+{#            url: '{% url "mark_all_read" %}',#}
+{#            success: function () {#}
+{#                $('#notify_count').html("");#}
+{#                $('#notify_list').html("");#}
+{#                $('#notify_header').html("{% blocktrans %}Usted tiene 0 notificaciones{% endblocktrans %}");#}
+{#            }#}
+{#        });#}
+{#    });#}
+{##}
+{#    $('#eliminar_pedidos_all').on("click", function () {#}
+{#        $.ajax({#}
+{#            url: '{% url "mark_offer_all_read" %}',#}
+{#            success: function () {#}
+{#                $('#sell_count').html("");#}
+{#                $('#sell_list').html("");#}
+{#            }#}
+{#        });#}
+{#    });#}
+{##}
+{#</script>#}
+<script src="{% static 'assets/plugins/datatables/jquery.dataTables.js' %}"></script>
+<script src="{% static 'assets/plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
+<script>
+    $(function () {
+        $("#example1").DataTable({
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando _START_ a _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+        });
+    });
+</script>
+{#<script>#}
+{#    $("#id_accoun").select2();#}
+{#</script>#}
+{% block script %}{% endblock %}
+<script>
+    $(function () {
+        // Summernote
+        $("#id_desc").summernote()
+    })
+</script>
+</body>
+</html>

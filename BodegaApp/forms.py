@@ -274,6 +274,7 @@ class Update_Provincia(UpdateView):
 
 class Delete_Provincia(DeleteView):
     model = models.Provincia
+    template_name = ('BodegaApp/provincia_confirm_delete.html')
     success_url = reverse_lazy('provincia_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -319,6 +320,7 @@ class Update_Municipio(UpdateView):
 
 class Delete_Municipio(DeleteView):
     model = models.Municipio
+    template_name = ('BodegaApp/municipio_confirm_delete.html')
     success_url = reverse_lazy('municipio_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -365,6 +367,7 @@ class Update_Consejo(UpdateView):
 
 class Delete_Consejo(DeleteView):
     model = models.ConsejoPopular
+    template_name = ('BodegaApp/consejopopular_confirm_delete.html')
     success_url = reverse_lazy('consejo_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -411,6 +414,7 @@ class Update_Zona(UpdateView):
 
 class Delete_Zona(DeleteView):
     model = models.Zona
+    template_name = ('BodegaApp/zona_confirm_delete.html')
     success_url = reverse_lazy('zona_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -454,6 +458,7 @@ class Update_Clasificacion(UpdateView):
 
 class Delete_Clasificacion(DeleteView):
     model = models.Clasificacion
+    template_name = ('BodegaApp/clasificacion_confirm_delete.html')
     success_url = reverse_lazy('clasificacion_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -498,6 +503,7 @@ class Update_UnidadMedida(UpdateView):
 
 class Delete_UnidadMedida(DeleteView):
     model = models.UnidadMedida
+    template_name = ('BodegaApp/unidadmedida_confirm_delete.html')
     success_url = reverse_lazy('unidad_medida_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -540,6 +546,7 @@ class Update_TipoOperacion(UpdateView):
 
 class Delete_TipoOperacion(DeleteView):
     model = models.TipoOperacion
+    template_name = ('BodegaApp/tipooperacion_confirm_delete.html')
     success_url = reverse_lazy('tipo_operacion_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -591,6 +598,7 @@ class Update_Producto(UpdateView):
 
 class Delete_Producto(DeleteView):
     model = models.Producto
+    template_name = ('BodegaApp/producto_confirm_delete.html')
     success_url = reverse_lazy('producto_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -640,6 +648,7 @@ class Update_Bodega(UpdateView):
 
 class Delete_Bodega(DeleteView):
     model = models.Bodega
+    template_name = ('BodegaApp/bodega_confirm_delete.html')
     success_url = reverse_lazy('bodega_listar')
 
     def delete(self, request, *args, **kwargs):

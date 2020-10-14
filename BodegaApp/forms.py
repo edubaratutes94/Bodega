@@ -262,7 +262,7 @@ class Form_Provincia(forms.ModelForm):
 class Update_Provincia(UpdateView):
     model = models.Provincia
     form_class = Form_Provincia
-    template_name = ('bodegaApp/provincia_form.html')
+    template_name = ('BodegaApp/provincia_form.html')
     success_url = reverse_lazy('provincia_listar')
 
     def post(self, request, *args, **kwargs):
@@ -308,7 +308,7 @@ class Form_Municipio(forms.ModelForm):
 class Update_Municipio(UpdateView):
     model = models.Municipio
     form_class = Form_Municipio
-    template_name = ('bodegaApp/municipio_form.html')
+    template_name = ('BodegaApp/municipio_form.html')
     success_url = reverse_lazy('municipio_listar')
 
     def post(self, request, *args, **kwargs):
@@ -355,7 +355,7 @@ class Form_Consejo(forms.ModelForm):
 class Update_Consejo(UpdateView):
     model = models.ConsejoPopular
     form_class = Form_Consejo
-    template_name = ('bodegaApp/consejo_form.html')
+    template_name = ('BodegaApp/consejo_form.html')
     success_url = reverse_lazy('consejo_listar')
 
     def post(self, request, *args, **kwargs):
@@ -402,7 +402,7 @@ class Form_Zona(forms.ModelForm):
 class Update_Zona(UpdateView):
     model = models.Zona
     form_class = Form_Zona
-    template_name = ('bodegaApp/zona_form.html')
+    template_name = ('BodegaApp/zona_form.html')
     success_url = reverse_lazy('zona_listar')
 
     def post(self, request, *args, **kwargs):
@@ -446,7 +446,7 @@ class Form_Clasificacion(forms.ModelForm):
 class Update_Clasificacion(UpdateView):
     model = models.Clasificacion
     form_class = Form_Clasificacion
-    template_name = ('bodegaApp/clasificacion_form.html')
+    template_name = ('BodegaApp/clasificacion_form.html')
     success_url = reverse_lazy('clasificacion_listar')
 
     def post(self, request, *args, **kwargs):
@@ -491,7 +491,7 @@ class Form_UnidadMedida(forms.ModelForm):
 class Update_UnidadMedida(UpdateView):
     model = models.UnidadMedida
     form_class = Form_UnidadMedida
-    template_name = ('bodegaApp/unidad_medida_form.html')
+    template_name = ('BodegaApp/unidad_medida_form.html')
     success_url = reverse_lazy('unidad_medida_listar')
 
     def post(self, request, *args, **kwargs):
@@ -534,7 +534,7 @@ class Form_TipoOperacion(forms.ModelForm):
 class Update_TipoOperacion(UpdateView):
     model = models.TipoOperacion
     form_class = Form_TipoOperacion
-    template_name = ('bodegaApp/tipo_operacion_form.html')
+    template_name = ('BodegaApp/tipo_operacion_form.html')
     success_url = reverse_lazy('tipo_operacion_listar')
 
     def post(self, request, *args, **kwargs):
@@ -586,7 +586,7 @@ class Form_Producto(forms.ModelForm):
 class Update_Producto(UpdateView):
     model = models.Producto
     form_class = Form_Producto
-    template_name = ('bodegaApp/producto_form.html')
+    template_name = ('BodegaApp/producto_form.html')
     success_url = reverse_lazy('producto_listar')
 
     def post(self, request, *args, **kwargs):
@@ -636,7 +636,7 @@ class Form_Bodega(forms.ModelForm):
 class Update_Bodega(UpdateView):
     model = models.Bodega
     form_class = Form_Bodega
-    template_name = ('bodegaApp/bodega_form.html')
+    template_name = ('BodegaApp/bodega_form.html')
     success_url = reverse_lazy('bodega_listar')
 
     def post(self, request, *args, **kwargs):
@@ -679,7 +679,7 @@ class Delete_Bodega(DeleteView):
 # class Update_tipoProceso(UpdateView):
 #     model = models.tipo_proceso
 #     form_class = Form_tipoProceso
-#     template_name = ('bodegaApp/tipo_proceso_form.html')
+#     template_name = ('BodegaApp/tipo_proceso_form.html')
 #     success_url = reverse_lazy('tipo_proceso_listar')
 #
 #     def post(self, request, *args, **kwargs):
@@ -724,7 +724,7 @@ class Delete_Bodega(DeleteView):
 # class Update_Proceso(UpdateView):
 #     model = models.Proceso
 #     form_class = Form_Proceso
-#     template_name = ('bodegaApp/proceso_form.html')
+#     template_name = ('BodegaApp/proceso_form.html')
 #     success_url = reverse_lazy('proceso_listar')
 #
 #     def post(self, request, *args, **kwargs):
@@ -769,7 +769,7 @@ class Delete_Bodega(DeleteView):
 # class Update_Contactos(UpdateView):
 #     model = models.Contacto
 #     form_class = Form_Contactos
-#     template_name = ('bodegaApp/contacto_form.html')
+#     template_name = ('BodegaApp/contacto_form.html')
 #     success_url = reverse_lazy('contacto_listar')
 #
 #     def post(self, request, *args, **kwargs):
@@ -829,7 +829,7 @@ class Delete_Bodega(DeleteView):
 # class Update_Empresa(UpdateView):
 #     model = models.Empresa
 #     form_class = Form_Empresa
-#     template_name = ('bodegaApp/empresa_form.html')
+#     template_name = ('BodegaApp/empresa_form.html')
 #     success_url = reverse_lazy('empresa_listar')
 #
 #     def post(self, request, *args, **kwargs):

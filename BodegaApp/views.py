@@ -283,7 +283,7 @@ def backend_provincia_agregar(request):
         form = forms.Form_Provincia()
     args = {}
     args['form'] = form
-    return render(request, 'bodegaApp/provincia_form.html', args)
+    return render(request, 'BodegaApp/provincia_form.html', args)
 
 
 # MUNICIPIOS
@@ -308,7 +308,7 @@ def backend_municipio_agregar(request):
         form = forms.Form_Municipio()
     args = {}
     args['form'] = form
-    return render(request, 'bodegaApp/municipio_form.html', args)
+    return render(request, 'BodegaApp/municipio_form.html', args)
 
 
 
@@ -334,7 +334,7 @@ def backend_consejo_agregar(request):
         form = forms.Form_Consejo()
     args = {}
     args['form'] = form
-    return render(request, 'bodegaApp/consejo_form.html', args)
+    return render(request, 'BodegaApp/consejo_form.html', args)
 
 
 # ZONAAA
@@ -359,7 +359,7 @@ def backend_zona_agregar(request):
         form = forms.Form_Zona()
     args = {}
     args['form'] = form
-    return render(request, 'bodegaApp/zona_form.html', args)
+    return render(request, 'BodegaApp/zona_form.html', args)
 
 # CLASIFICACION
 @permission_required('BodegaApp.add_provincia')
@@ -383,7 +383,7 @@ def backend_clasificacion_agregar(request):
         form = forms.Form_Clasificacion()
     args = {}
     args['form'] = form
-    return render(request, 'bodegaApp/clasificacion_form.html', args)
+    return render(request, 'BodegaApp/clasificacion_form.html', args)
 
 
 
@@ -411,7 +411,7 @@ def backend_unidadmedida_agregar(request):
         form = forms.Form_UnidadMedida()
     args = {}
     args['form'] = form
-    return render(request, 'bodegaApp/unidad_medida_form.html', args)
+    return render(request, 'BodegaApp/unidad_medida_form.html', args)
 
 
 
@@ -439,7 +439,7 @@ def backend_tipo_operacion_agregar(request):
         form = forms.Form_TipoOperacion()
     args = {}
     args['form'] = form
-    return render(request, 'bodegaApp/tipo_operacion_form.html', args)
+    return render(request, 'BodegaApp/tipo_operacion_form.html', args)
 
 
 # Producto
@@ -464,7 +464,7 @@ def backend_producto_agregar(request):
         form = forms.Form_Producto()
     args = {}
     args['form'] = form
-    return render(request, 'bodegaApp/producto_form.html', args)
+    return render(request, 'BodegaApp/producto_form.html', args)
 
 
 # Bodega
@@ -489,5 +489,5 @@ def backend_bodega_agregar(request):
         form = forms.Form_Bodega()
     args = {}
     args['form'] = form
-    return render(request, 'bodegaApp/bodega_form.html', args)
+    return render(request, 'BodegaApp/bodega_form.html', args)
 

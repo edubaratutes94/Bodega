@@ -95,6 +95,7 @@ class UnidadMedida(models.Model):
 
 
 class Producto(models.Model):
+    codigo = models.CharField(max_length=100, verbose_name="Código", null=True)
     precio_venta = models.FloatField(verbose_name="Precio de Venta")
     precio_costo = models.FloatField(verbose_name="Precio de Costo")
     nombre = models.CharField(max_length=100, verbose_name="Nombre")

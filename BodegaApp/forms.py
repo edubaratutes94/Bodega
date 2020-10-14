@@ -564,6 +564,7 @@ class Form_Producto(forms.ModelForm):
         model = models.Producto
         fields = [
             'nombre',
+            'codigo',
             'precio_costo',
             'precio_venta',
             'unidad',
@@ -573,6 +574,7 @@ class Form_Producto(forms.ModelForm):
         ]
         widgets = {
             "nombre": widgets.TextInput(attrs={'class': ' form-control', 'required': 'required'}),
+            "codigo": widgets.TextInput(attrs={'class': ' form-control', 'required': 'required'}),
             "precio_costo": widgets.NumberInput(attrs={'class': ' form-control', 'required': 'required'}),
             "precio_venta": widgets.NumberInput(attrs={'class': ' form-control', 'required': 'required'}),
             "unidad": widgets.Select(attrs={'class': ' form-control', 'required': 'required'}),

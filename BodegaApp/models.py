@@ -78,6 +78,7 @@ class Zona(models.Model):
         verbose_name_plural = "Zonas"
 
 class Clasificacion(models.Model):
+    uui = models.UUIDField(default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100, verbose_name="Nombre", unique=True)
     def __str__(self):
         return str(self.nombre)
@@ -86,6 +87,7 @@ class Clasificacion(models.Model):
         verbose_name_plural = "Clasificaciones"
 
 class UnidadMedida(models.Model):
+    uui = models.UUIDField(default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100, verbose_name="Unidad de Medida", unique=True)
     def __str__(self):
         return str(self.nombre)
@@ -95,6 +97,7 @@ class UnidadMedida(models.Model):
 
 
 class Producto(models.Model):
+    uui = models.UUIDField(default=uuid.uuid4, editable=False)
     codigo = models.CharField(max_length=100, verbose_name="Código", null=True)
     precio_venta = models.FloatField(verbose_name="Precio de Venta")
     precio_costo = models.FloatField(verbose_name="Precio de Costo")
@@ -123,6 +126,7 @@ class Bodega(models.Model):
         verbose_name_plural = "Bodegas"
 
 class TipoOperacion(models.Model):
+    uui = models.UUIDField(default=uuid.uuid4, editable=False)
     nombre = models.CharField(max_length=100, verbose_name="Nombre", unique=True)
 
     def __str__(self):
@@ -130,6 +134,19 @@ class TipoOperacion(models.Model):
 
     class Meta:
         verbose_name_plural = "Operaciones"
+
+class Notificacion_general(models.Model):
+    uui = models.UUIDField(default=uuid.uuid4, editable=False)
+    titulo = models.CharField(max_length=100, verbose_name="Título")
+    fecha = models.DateTimeField( verbose_name="Fecha", auto_now=True)
+    mensaje = models.TextField(max_length=250, verbose_name="Mensaje")
+
+    def __str__(self):
+        return str(self.titulo)
+
+    class Meta:
+        verbose_name_plural = "Notificaciones"
+
 
 # class SeccionOperacion(models.Model):
 #     nombre = models.CharField(max_length=100, verbose_name="Nombre", unique=True)
@@ -146,7 +163,7 @@ class TipoOperacion(models.Model):
 #     cantidad = models.FloatField(verbose_name="Cantidad")
 #     cantidad = models.FloatField(verbose_name="Cantidad")
 #     cantidad = models.FloatField(verbose_name="Cantidad")
-#
+
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

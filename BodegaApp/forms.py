@@ -320,7 +320,6 @@ class Update_Municipio(UpdateView):
 
 class Delete_Municipio(DeleteView):
     model = models.Municipio
-    template_name = ('BodegaApp/municipio_confirm_delete.html')
     success_url = reverse_lazy('municipio_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -367,7 +366,6 @@ class Update_Consejo(UpdateView):
 
 class Delete_Consejo(DeleteView):
     model = models.ConsejoPopular
-    template_name = ('BodegaApp/consejopopular_confirm_delete.html')
     success_url = reverse_lazy('consejo_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -414,7 +412,6 @@ class Update_Zona(UpdateView):
 
 class Delete_Zona(DeleteView):
     model = models.Zona
-    template_name = ('BodegaApp/zona_confirm_delete.html')
     success_url = reverse_lazy('zona_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -458,7 +455,6 @@ class Update_Clasificacion(UpdateView):
 
 class Delete_Clasificacion(DeleteView):
     model = models.Clasificacion
-    template_name = ('BodegaApp/clasificacion_confirm_delete.html')
     success_url = reverse_lazy('clasificacion_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -503,7 +499,6 @@ class Update_UnidadMedida(UpdateView):
 
 class Delete_UnidadMedida(DeleteView):
     model = models.UnidadMedida
-    template_name = ('BodegaApp/unidadmedida_confirm_delete.html')
     success_url = reverse_lazy('unidad_medida_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -546,7 +541,6 @@ class Update_TipoOperacion(UpdateView):
 
 class Delete_TipoOperacion(DeleteView):
     model = models.TipoOperacion
-    template_name = ('BodegaApp/tipooperacion_confirm_delete.html')
     success_url = reverse_lazy('tipo_operacion_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -600,7 +594,6 @@ class Update_Producto(UpdateView):
 
 class Delete_Producto(DeleteView):
     model = models.Producto
-    template_name = ('BodegaApp/producto_confirm_delete.html')
     success_url = reverse_lazy('producto_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -650,7 +643,6 @@ class Update_Bodega(UpdateView):
 
 class Delete_Bodega(DeleteView):
     model = models.Bodega
-    template_name = ('BodegaApp/bodega_confirm_delete.html')
     success_url = reverse_lazy('bodega_listar')
 
     def delete(self, request, *args, **kwargs):
@@ -661,7 +653,54 @@ class Delete_Bodega(DeleteView):
         messages.success(request, "Bodega eliminada con éxito")
         return HttpResponseRedirect(success_url)
 
+###NOTIFICACIONES GENERSKES
+class Form_NotiGeneral(forms.ModelForm):
+    class Meta:
+        model = models.Notificacion_general
+        fields = [
+            'titulo',
+            'mensaje',
 
+        ]
+        widgets = {
+            "titulo": widgets.TextInput(attrs={'class': ' form-control', 'required': 'required'}),
+            "mensaje": widgets.Textarea(attrs={'class': ' form-control', 'required': 'required'}),
+            # "descripcion": widgets.Textarea(attrs={'class': ' form-control', 'required': 'required'}),
+            # "email": widgets.EmailInput(attrs={'class': ' form-control'}),
+            # "groups": widgets.SelectMultiple(attrs={'class': ' form-control'}),
+            # "is_active": widgets.CheckboxInput(attrs={'class': ' form-control'}),
+            # "imagen": widgets.FileInput(attrs={'class': ' form-control'}),
+        }
+
+class Update_NotiGeneral(UpdateView):
+    model = models.Notificacion_general
+    form_class = Form_NotiGeneral
+    template_name = ('BodegaApp/notificacion_form.html')
+    success_url = reverse_lazy('notificacion_listar')
+
+    def post(self, request, *args, **kwargs):
+        register_logs(request, models.Notificacion_general, self.get_object().pk, self.get_object().__str__(), 2)
+        # notify.send(request.user , recipient=self.get_object(), verb='Se han modificado sus datos', level='warning')
+        self.object = self.get_object()
+        messages.success(request, "Notificación modificada con éxito")
+        return super(BaseUpdateView, self).post(request, *args, **kwargs)
+
+class Delete_NotiGeneral(DeleteView):
+    model = models.Notificacion_general
+    success_url = reverse_lazy('notificacion_listar')
+    template_name = ('BodegaApp/notificacion_confirm_delete.html')
+
+
+    def delete(self, request, *args, **kwargs):
+        register_logs(request, models.Notificacion_general, self.get_object().pk, self.get_object().__str__(), 3)
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        messages.success(request, "Notificación eliminada con éxito")
+        return HttpResponseRedirect(success_url)
+
+
+    ### Producto
 
 
 # ## TIPO DE PROCESO

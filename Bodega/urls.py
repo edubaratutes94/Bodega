@@ -22,8 +22,8 @@ from rest_framework.authtoken import views as authviews
 from BodegaApp import views, forms
 from django.conf.urls.static import static
 from rest_framework import routers
-router = routers.DefaultRouter()
-from ApiApp import urls
+# router = routers.DefaultRouter()
+# from ApiApp import urls
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
@@ -31,8 +31,11 @@ urlpatterns = [
     path('', views.just_login, name='just_login'),
     path('logout/', views.logout, name='logout'),
     # path('api/', include(router.urls)),
-    path('inicio_api/', include('ApiApp.urls'), name='inicio_api'),
-    path('api_generate_token/',authviews.obtain_auth_token),
+
+
+    # path('api/auth/', include('rest_framework.urls')),
+
+    ###api####
 
     # path('api-token-auth/ ', views.obtain_auth_token),
     # path('register/', views.register_front, name="register_front"),
@@ -150,16 +153,27 @@ urlpatterns = [
          name="producto_delete"),
 
     #### Bodega
-    path('nomenclador/bodega/list', login_required(views.backend_bodega_listar),
+    path('bodega/list', login_required(views.backend_bodega_listar),
          name="bodega_listar"),
-    path('nomenclador/bodega/create', login_required(views.backend_bodega_agregar),
+    path('bodega/create', login_required(views.backend_bodega_agregar),
          name="bodega_create"),
-    path('nomenclador/bodega/update/<int:pk>', login_required(forms.Update_Bodega.as_view()),
+    path('bodega/update/<int:pk>', login_required(forms.Update_Bodega.as_view()),
          name="bodega_update"),
-    path('nomenclador/bodega/delete/<int:pk>', login_required(forms.Delete_Bodega.as_view()),
+    path('bodega/delete/<int:pk>', login_required(forms.Delete_Bodega.as_view()),
          name="bodega_delete"),
+
+
+    #### NOTIFICACION
+    path('notificacion/list', login_required(views.backend_noti_listar),
+         name="notificacion_listar"),
+    path('notificacion/create', login_required(views.backend_noti_agregar),
+         name="notificacion_create"),
+    path('notificacion/update/<int:pk>', login_required(forms.Update_NotiGeneral.as_view()),
+         name="notificacion_update"),
+    path('notificacion/delete/<int:pk>', login_required(forms.Delete_NotiGeneral.as_view()),
+         name="notificacion_delete"),
     ######################## API ###################----------------------------------------------------------------
-    # path('api/', include(router.urls)),
-    # path('api-login/', views.LoginView.as_view()),
+    path('api/', include('ApiApp.urls'), name='api'),
+    path('api_generate_token/', authviews.obtain_auth_token),
 ]
 

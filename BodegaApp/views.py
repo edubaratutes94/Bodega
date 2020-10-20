@@ -74,23 +74,6 @@ def loguear(request):
         return render(request, "Authentication/login.html", {"username": username, "user_photo": userPhoto})
     return render(request, 'Authentication/login.html')
 
-#
-# def register_by_url(request, token):
-#     try:
-#         uuid.UUID(token)
-#     except:
-#         response = HttpResponseRedirect('/register/')
-#         response.delete_cookie("refer_user")
-#         return response
-#     else:
-#         user = models.UserApp.objects.filter(uui=token)
-#         if user.count() > 0:
-#             response = HttpResponseRedirect('/register/')
-#             response.set_cookie("refer_user", token)
-#             return response
-#     response = HttpResponseRedirect('/register/')
-#     response.delete_cookie("refer_user")
-#     return response
 
 def count_activated(request):
     return render(request, 'registration/good_message_activated.html')
@@ -177,16 +160,13 @@ class PasswordResetView(PasswordContextMixin, FormView):
         form.save(**opts)
         return super().form_valid(form)
 
-
 @permission_required('auth.add_group')
 def group_list(request):
     groups = Group.objects.all()
     return render(request, 'Security/groups.html', {'group_list': groups})
 
-
 def error404(request):
     return render(request, "Security/404.html")
-
 
 # CRUD Rol
 @permission_required('auth.add_group')
@@ -206,7 +186,6 @@ def group_create(request):
     args = {}
     args['form'] = form
     return render(request, 'auth/group_form.html', args)
-
 
 @permission_required('auth.add_user')
 def user_list(request):
@@ -490,4 +469,30 @@ def backend_bodega_agregar(request):
     args = {}
     args['form'] = form
     return render(request, 'BodegaApp/bodega_form.html', args)
+
+
+
+# NOTIGNERAKL
+@permission_required('BodegaApp.add_provincia')
+def backend_noti_listar(request):
+    notificacion = models.Notificacion_general.objects.all()
+    return render(request, 'backend/notificacion.html', {'notificacion': notificacion})
+
+@permission_required('BodegaApp.add_provincia')
+def backend_noti_agregar(request):
+    if request.POST:
+        form = forms.Form_NotiGeneral(request.POST)
+        if form.is_valid():
+            form.save()
+            x = models.Notificacion_general.objects.last()
+            register_logs(request, models.Notificacion_general, x.pk, x.__str__(), 1)
+            messages.success(request, "Notificación creada con éxito")
+            return HttpResponseRedirect('/nomenclador/notificacion/list')
+        else:
+            messages.error(request, "Error en el formulario")
+    else:
+        form = forms.Form_NotiGeneral()
+    args = {}
+    args['form'] = form
+    return render(request, 'BodegaApp/notificacion_form.html', args)
 

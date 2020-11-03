@@ -1,6 +1,7 @@
 import datetime
 import uuid
 import os
+from django.core.validators import MinValueValidator
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.db import models
@@ -99,8 +100,7 @@ class UnidadMedida(models.Model):
 class Producto(models.Model):
     uui = models.UUIDField(default=uuid.uuid4, editable=False)
     codigo = models.CharField(max_length=100, verbose_name="Código", null=True)
-    precio_venta = models.FloatField(verbose_name="Precio de Venta")
-    precio_costo = models.FloatField(verbose_name="Precio de Costo")
+    precio_venta = models.FloatField(verbose_name="Precio de Venta",validators=[MinValueValidator(0)])
     nombre = models.CharField(max_length=100, verbose_name="Nombre")
     unidad = models.ForeignKey(UnidadMedida, verbose_name="Unidad de Medidas", on_delete=models.CASCADE)
     clasificacion = models.ForeignKey(Clasificacion, verbose_name="Clasificación", on_delete=models.CASCADE)
@@ -117,7 +117,7 @@ class Bodega(models.Model):
     nombre = models.CharField(max_length=100, verbose_name="Nombre", unique=True)
     admin = models.ForeignKey(User, verbose_name="Administrador", on_delete=models.CASCADE)
     zona = models.ForeignKey(Zona, verbose_name="Zona", on_delete=models.CASCADE)
-    productos = models.ManyToManyField(Producto,verbose_name="Productos")
+    productos = models.ManyToManyField(Producto, verbose_name="Productos")
 
     def __str__(self):
         return str(self.nombre)
@@ -148,23 +148,32 @@ class Notificacion_general(models.Model):
         verbose_name_plural = "Notificaciones"
 
 
-# class SeccionOperacion(models.Model):
-#     nombre = models.CharField(max_length=100, verbose_name="Nombre", unique=True)
-#
-#     def __str__(self):
-#         return str(self.nombre)
-#
-#     class Meta:
-#         verbose_name_plural = "Sección de operaciones"
-#
-# class Operacion(models.Model):
-#     fecha = models.DateTimeField(verbose_name="Fecha", auto_now=True)
-#     cantidad = models.FloatField(verbose_name="Cantidad")
-#     cantidad = models.FloatField(verbose_name="Cantidad")
-#     cantidad = models.FloatField(verbose_name="Cantidad")
-#     cantidad = models.FloatField(verbose_name="Cantidad")
+class SeccionOperacion(models.Model):
+    uui = models.UUIDField(default=uuid.uuid4, editable=False)
+    nombre = models.CharField(max_length=100, verbose_name="Nombre")
+    tipo_operacion = models.ForeignKey(TipoOperacion, verbose_name="Tipo de Operación",
+                                       on_delete=models.CASCADE)
 
 
+    def __str__(self):
+        return str(self.nombre)
+
+    class Meta:
+        verbose_name_plural = "Sección de operaciones"
+
+class Operacion(models.Model):
+    uui = models.UUIDField(default=uuid.uuid4, editable=False)
+    factura = models.CharField(max_length=100, verbose_name="Número de Factura", blank=True,
+                               help_text="En caso de operación por Facturación")
+    fecha = models.DateTimeField(verbose_name="Fecha", auto_now=True)
+    cantidad = models.FloatField(verbose_name="Cantidad", default=0, blank=True, validators=[MinValueValidator(0)])
+    imp_pv = models.FloatField(verbose_name="Imp/PV", default=0, blank=True, validators=[MinValueValidator(0)])
+    imp_pc = models.FloatField(verbose_name="Imp/PC", default=0, blank=True, validators=[MinValueValidator(0)])
+    precio_costo = models.FloatField(verbose_name="Precio de Costo", null=True, validators=[MinValueValidator(0)])
+    seccion_operacion = models.ForeignKey(SeccionOperacion, verbose_name="Sección de Operación",
+                                          on_delete=models.CASCADE, null=True)
+    bodega = models.ForeignKey(Bodega, verbose_name="Bodega", on_delete=models.CASCADE, null=True)
+    producto = models.ForeignKey(Producto, verbose_name="Producto", on_delete=models.CASCADE, null=True)
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):

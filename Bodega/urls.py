@@ -172,7 +172,21 @@ urlpatterns = [
          name="notificacion_update"),
     path('notificacion/delete/<int:pk>', login_required(forms.Delete_NotiGeneral.as_view()),
          name="notificacion_delete"),
-    ######################## API ###################----------------------------------------------------------------
+
+    ######################## Operaciones ###################----------------------------------------------------------
+
+    path('operacion/list', login_required(views.operacion_listar),
+         name="operacion_listar"),
+    path('operacion/create', login_required(views.operacion_agregar),
+         name="operacion_create"),
+    path('operacion/facturacion', login_required(views.facturacion_agregar),
+         name="facturacion_create"),
+    path('operacion/update/<int:pk>', login_required(forms.Update_Operacion.as_view()),
+         name="operacion_update"),
+    path('operacion/delete/<int:pk>', login_required(forms.Delete_Operacion.as_view()),
+         name="operacion_delete"),
+
+    # ######################## API ###################----------------------------------------------------------------
     path('api/', include('ApiApp.urls'), name='api'),
     path('api_generate_token/', authviews.obtain_auth_token),
 ]

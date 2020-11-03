@@ -8,6 +8,7 @@ router.register('users', views.UserViewSet, basename='users')
 router.register('provincias-all', views.ProvinciaAllViewSet, basename="provincias_all")
 router.register('municipios-all', views.MunicipioAllViewSet, basename="municipios_all")
 router.register('bodega-productos', views.BodegaAllProductosViewSet, basename="bodega_productos")
+router.register('notificaciones', views.NotificacionAllViewSet, basename="notificaciones")
 urlpatterns = [
     # API APK
     path('v1/', include(router.urls)),

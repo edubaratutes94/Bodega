@@ -559,7 +559,7 @@ class Form_Producto(forms.ModelForm):
         fields = [
             'nombre',
             'codigo',
-            'precio_costo',
+            # 'precio_costo',
             'precio_venta',
             'unidad',
             'clasificacion',
@@ -569,7 +569,7 @@ class Form_Producto(forms.ModelForm):
         widgets = {
             "nombre": widgets.TextInput(attrs={'class': ' form-control', 'required': 'required'}),
             "codigo": widgets.TextInput(attrs={'class': ' form-control', 'required': 'required'}),
-            "precio_costo": widgets.NumberInput(attrs={'class': ' form-control', 'required': 'required'}),
+            # "precio_costo": widgets.NumberInput(attrs={'class': ' form-control', 'required': 'required'}),
             "precio_venta": widgets.NumberInput(attrs={'class': ' form-control', 'required': 'required'}),
             "unidad": widgets.Select(attrs={'class': ' form-control', 'required': 'required'}),
             "clasificacion": widgets.Select(attrs={'class': ' form-control', 'required': 'required'}),
@@ -661,6 +661,7 @@ class Form_NotiGeneral(forms.ModelForm):
             'titulo',
             'mensaje',
 
+
         ]
         widgets = {
             "titulo": widgets.TextInput(attrs={'class': ' form-control', 'required': 'required'}),
@@ -697,6 +698,95 @@ class Delete_NotiGeneral(DeleteView):
         success_url = self.get_success_url()
         self.object.delete()
         messages.success(request, "Notificación eliminada con éxito")
+        return HttpResponseRedirect(success_url)
+
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!OPERACIONES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+class Form_Operacion(forms.ModelForm):
+    class Meta:
+        model = models.Operacion
+        fields = [
+            'bodega',
+            'producto',
+            'seccion_operacion',
+            'precio_costo',
+            'cantidad',
+
+        ]
+        widgets = {
+            "bodega": widgets.Select(attrs={'class': ' form-control', 'required': 'required'}),
+            "producto": widgets.Select(attrs={'class': ' form-control', 'required': 'required'}),
+            "seccion_operacion": widgets.Select(attrs={'class': ' form-control', 'required': 'required'}),
+            "precio_costo": widgets.NumberInput(attrs={'class': ' form-control', 'required': 'required'}),
+            "cantidad": widgets.NumberInput(attrs={'class': ' form-control'}),
+            # "total": widgets.NumberInput(attrs={'class': ' form-control'}),
+            # "descripcion": widgets.Textarea(attrs={'class': ' form-control', 'required': 'required'}),
+            # "email": widgets.EmailInput(attrs={'class': ' form-control'}),
+            # "groups": widgets.SelectMultiple(attrs={'class': ' form-control'}),
+            # "is_active": widgets.CheckboxInput(attrs={'class': ' form-control'}),
+            # "imagen": widgets.FileInput(attrs={'class': ' form-control'}),
+        }
+
+        labels ={
+            "cantidad": "Cantidad en Libras"
+        }
+
+
+class Form_Operacion1(forms.ModelForm):
+    class Meta:
+        model = models.Operacion
+        fields = [
+            'bodega',
+            'producto',
+            'seccion_operacion',
+            'precio_costo',
+            'cantidad',
+            'factura',
+
+        ]
+        widgets = {
+            "bodega": widgets.Select(attrs={'class': ' form-control', 'required': 'required'}),
+            "producto": widgets.Select(attrs={'class': ' form-control', 'required': 'required'}),
+            "seccion_operacion": widgets.Select(attrs={'class': ' form-control', 'required': 'required'}),
+            "precio_costo": widgets.NumberInput(attrs={'class': ' form-control', 'required': 'required'}),
+            "cantidad": widgets.NumberInput(attrs={'class': ' form-control', }),
+            "factura": widgets.TextInput(attrs={'class': ' form-control'}),
+            # "total": widgets.NumberInput(attrs={'class': ' form-control'}),
+            # "descripcion": widgets.Textarea(attrs={'class': ' form-control', 'required': 'required'}),
+            # "email": widgets.EmailInput(attrs={'class': ' form-control'}),
+            # "groups": widgets.SelectMultiple(attrs={'class': ' form-control'}),
+            # "is_active": widgets.CheckboxInput(attrs={'class': ' form-control'}),
+            # "imagen": widgets.FileInput(attrs={'class': ' form-control'}),
+        }
+        labels ={
+            "cantidad": "Cantidad en Kilogramos"
+        }
+
+
+class Update_Operacion(UpdateView):
+    model = models.Operacion
+    form_class = Form_Operacion
+    template_name = ('BodegaApp/operacion_form.html')
+    success_url = reverse_lazy('operacion_listar')
+
+
+    def post(self, request, *args, **kwargs):
+        register_logs(request, models.Operacion, self.get_object().pk, self.get_object().__str__(), 2)
+        messages.success(request, "Operación modificada con éxito")
+        return super(BaseUpdateView, self).post(request, *args, **kwargs)
+
+class Delete_Operacion(DeleteView):
+    model = models.Operacion
+    success_url = reverse_lazy('operacion_listar')
+    template_name = ('BodegaApp/operacion_confirm_delete.html')
+
+
+    def delete(self, request, *args, **kwargs):
+        register_logs(request, models.Operacion, self.get_object().pk, self.get_object().__str__(), 3)
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.delete()
+        messages.success(request, "Operación eliminada con éxito")
         return HttpResponseRedirect(success_url)
 
 

@@ -1,8 +1,10 @@
 import subprocess
 import uuid
 from datetime import date
-
 from django.contrib import messages
+from django.utils.encoding import force_str
+from django.contrib.messages.api import success, warning, error
+from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth import authenticate, login, update_session_auth_hash
 from django.contrib.auth.decorators import permission_required
@@ -12,7 +14,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.views import logout_then_login, PasswordContextMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
@@ -20,7 +22,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views.generic import ListView
 from django.views.decorators.csrf import csrf_protect
-from django.views.generic import FormView
+from django.views.generic import *
 from notifications import models as models_notify
 from notifications.signals import notify
 from django.shortcuts import redirect
@@ -424,7 +426,7 @@ def backend_tipo_operacion_agregar(request):
 # Producto
 @permission_required('BodegaApp.add_provincia')
 def backend_producto_listar(request):
-    producto = models.Producto.objects.all()
+    producto = models.Producto.objects.order_by('-pk').all()
     return render(request, 'backend/producto.html', {'producto': producto})
 
 @permission_required('BodegaApp.add_provincia')
@@ -461,7 +463,7 @@ def backend_bodega_agregar(request):
             x = models.Bodega.objects.last()
             register_logs(request, models.Bodega, x.pk, x.__str__(), 1)
             messages.success(request, "Bodega creada con éxito")
-            return HttpResponseRedirect('/nomenclador/bodega/list')
+            return HttpResponseRedirect('/bodega/list')
         else:
             messages.error(request, "Error en el formulario")
     else:
@@ -487,7 +489,7 @@ def backend_noti_agregar(request):
             x = models.Notificacion_general.objects.last()
             register_logs(request, models.Notificacion_general, x.pk, x.__str__(), 1)
             messages.success(request, "Notificación creada con éxito")
-            return HttpResponseRedirect('/nomenclador/notificacion/list')
+            return HttpResponseRedirect('/notificacion/list')
         else:
             messages.error(request, "Error en el formulario")
     else:
@@ -496,3 +498,74 @@ def backend_noti_agregar(request):
     args['form'] = form
     return render(request, 'BodegaApp/notificacion_form.html', args)
 
+
+#########################OPERACIONESS@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@permission_required('BodegaApp.add_operacion')
+def operacion_listar(request):
+    operacion = models.Operacion.objects.order_by("-id")
+    return render(request, 'backend/operacion.html', {'operacion': operacion})
+
+# def calcular():
+#     operacion = models.Operacion.objects.all()
+#     if operacion.model.producto_set.all():
+#         x = operacion.cantidad_kg * 2.2
+#         operacion.cantidad_lb = operacion.cantidad_lb + x
+#         operacion.imp_pv = operacion.producto.precio_venta * operacion.cantidad_lb
+#         operacion.imp_pc = operacion.imp_pc * operacion.cantidad_lb
+#         operacion.save()
+
+
+
+# @permission_required('BodegaApp.add_operacion')
+# @permission_required('BodegaApp.add_operacion')
+def operacion_agregar(request):
+    operacion = models.Operacion.objects.all()
+    if request.POST:
+        form = forms.Form_Operacion(request.POST)
+        if form.is_valid():
+            cantidad = form.cleaned_data['cantidad']
+            bodega = form.cleaned_data['bodega']
+            precio_costo = form.cleaned_data['precio_costo']
+            producto = form.cleaned_data['producto']
+            seccion_operacion = form.cleaned_data['seccion_operacion']
+            operacion = operacion.get_or_create(bodega=bodega, producto=producto, seccion_operacion=seccion_operacion,
+                                                cantidad=cantidad, imp_pv=cantidad * producto.precio_venta,
+                                                imp_pc=cantidad * precio_costo)
+
+            x = models.Operacion.objects.last()
+            register_logs(request, models.Operacion, x.pk, x.__str__(), 1)
+            messages.success(request, "Operación creada con éxito")
+            return HttpResponseRedirect('/operacion/list')
+        else:
+            messages.error(request, "Error en el formulario")
+    else:
+        form = forms.Form_Operacion()
+    args = {}
+    args['form'] = form
+    return render(request, 'BodegaApp/operacion_form.html', args)
+
+# @permission_required('BodegaApp.add_operacion')
+def facturacion_agregar(request):
+    operacion = models.Operacion.objects.all()
+    if request.POST:
+        form = forms.Form_Operacion1(request.POST)
+        if form.is_valid():
+            cantidad = form.cleaned_data['cantidad']
+            bodega = form.cleaned_data['bodega']
+            precio_costo = form.cleaned_data['precio_costo']
+            producto = form.cleaned_data['producto']
+            seccion_operacion = form.cleaned_data['seccion_operacion']
+            operacion = operacion.get_or_create(bodega=bodega, producto=producto, seccion_operacion=seccion_operacion,
+                                                cantidad=cantidad * 2.2, imp_pv=(cantidad * 2.2) * producto.precio_venta,
+                                                imp_pc=(cantidad * 2.2) * precio_costo)
+            x = models.Operacion.objects.last()
+            register_logs(request, models.Operacion, x.pk, x.__str__(), 1)
+            messages.success(request, "Operación de Facturación creada con éxito")
+            return HttpResponseRedirect('/operacion/list')
+        else:
+            messages.error(request, "Error en el formulario")
+    else:
+        form = forms.Form_Operacion1()
+    args = {}
+    args['form'] = form
+    return render(request, 'BodegaApp/operacion_form.html', args)

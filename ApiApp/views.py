@@ -80,9 +80,7 @@ class MunicipioAllViewSet(viewsets.ModelViewSet):
             queryset = Municipio.objects.filter(provincia__uui=uui_prov).all()
         return queryset
 
-
 ######BODEGA-- Todos los productos
-# Aki se supone que cuando el ponga en la apk el id del admin(user, creo q des esta forma estoy usando el user del request, que es como el lo kiere) obtenga todos los productos de esa bodega
 
 class BodegaAllProductosViewSet(viewsets.ModelViewSet):
     serializer_class = BodegaProductosSerializer
@@ -97,7 +95,6 @@ class BodegaAllProductosViewSet(viewsets.ModelViewSet):
         return queryset
 
 
-   # Todos los Notificaciones
 class NotificacionAllViewSet(viewsets.ModelViewSet):
     serializer_class = NotificacionSerializer
     permission_classes = [IsAuthenticated]
@@ -107,3 +104,12 @@ class NotificacionAllViewSet(viewsets.ModelViewSet):
         queryset = Notificacion_general.objects.all()
         return queryset
 
+# class BodegaViewSet(viewsets.ModelViewSet):
+#     # permission_classes = [IsAuthenticated]
+#     authorization_classes = [TokenAuthentication]
+#     serializer_class = BodegaSerializer
+#
+#     def get_queryset(self):
+#         uui_prod = self.request.query_params.get('pk')
+#         queryset = Bodega.objects.filter(productos__pk=uui_prod).aggregate(Sum('productos'))
+#         return queryset

@@ -1,4 +1,4 @@
-{% extends 'backend/bodega.html' %}
+{% extends 'backend/operacion.html' %}
 {% load static %}
 
 {% block content %}
@@ -17,7 +17,7 @@
                     <div class="alert">
 
                     <h4>
-                        Esta seguro que desea eliminar la informción de la Notificación(( <strong>{{ object.titulo }}</strong> )).
+                        Esta seguro que desea eliminar la informción seleccionada.
                         La
                         información no podrá
                         restaurarse
@@ -28,7 +28,7 @@
                             <button type="submit" class="btn btn-danger">
                                 Borrar
                             </button>
-                            <a class="btn btn-primary" href="{% url 'notificacion_listar' %}">
+                            <a class="btn btn-primary" href="{% url 'operacion_listar' %}">
                                 Cancelar
                             </a>
                         </p>

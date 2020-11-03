@@ -16,6 +16,7 @@ from django.urls import reverse_lazy
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -27,10 +28,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+
 # Application definition
 
 INSTALLED_APPS = [
     'Bodega',
+    'ApiApp',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -38,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'BodegaApp.apps.BodegaappConfig',
-    'ApiApp',
     'django_cleanup',
     'captcha',
     'notifications',
@@ -46,15 +48,15 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
 ]
 
-#
+
 # REST_FRAMEWORK = {
 #     'DEFAULT_AUTHENTICATION_CLASSES': [
 #         'rest_framework.authentication.TokenAuthentication',
 #     ],
-#     # 'DEFAULT_PERMISSION_CLASSES': [
-#     #     # 'rest_framework.permissions.IsAuthenticated',
-#     #     'rest_framework.permissions.AllowAny',
-#     # ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    #     'rest_framework.permissions.AllowAny',
+    # ],
 #
 # }
 
@@ -75,8 +77,7 @@ ROOT_URLCONF = 'Bodega.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -92,6 +93,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Bodega.wsgi.application'
+
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -115,6 +117,8 @@ DATABASES = {
     }
 }
 
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -133,6 +137,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -146,6 +151,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
@@ -155,9 +161,10 @@ STATICFILES_DIRS = [
 ]
 LOGIN_REDIRECT_URL = reverse_lazy('inicio')
 LOGOUT_REDIRECT_URL = reverse_lazy('ce_login')
-SESSION_COOKIE_AGE = 600  # 10min
+SESSION_COOKIE_AGE = 600 #10min
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
+
 
 # notificaciones
 DJANGO_NOTIFICATIONS_CONFIG = {'USE_JSONFIELD': True, 'SOFT_DELETE': True}

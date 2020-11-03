@@ -64,11 +64,10 @@ class MunicipioSerializer(serializers.ModelSerializer):
         fields = ('uui', 'nombre', 'provincia')
 
     def get_provincia(self, obj):
-        return obj.provincia.nombre
+        return obj.provincia.uui
 
 
-# Aki se supone que cuando el ponga en la apk el id del admin obtenga todos los productos de esa bodega
-# supongo que aki le estoy enviando los productos, no tengo como probarlo
+# bodega, devuelve por el user todos los productos de la bodega
 class BodegaProductosSerializer(serializers.ModelSerializer):
     productos = serializers.SerializerMethodField()
 
@@ -91,3 +90,4 @@ class NotificacionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notificacion_general
         fields = "__all__"
+

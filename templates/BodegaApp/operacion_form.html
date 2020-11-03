@@ -1,8 +1,8 @@
-{% extends 'backend/bodega.html' %}
+{% extends 'backend/operacion.html' %}
 {% load static %}
 
-{% block bodegas %}
-    <li class="breadcrumb-item"><a href="{% url 'bodega_listar' %}">Bodega</a></li>
+{% block operaciones %}
+    <li class="breadcrumb-item"><a href="{% url 'operacion_listar' %}">Operación</a></li>
     <li class="breadcrumb-item active">Formulario</li>
 
 {% endblock %}
@@ -41,7 +41,7 @@
                          <div class="form-actions fluid">
                             <div class="col-md-offset-3 col-md-9">
                                 <button type="submit" class="btn btn-primary">Enviar</button>
-                                <a href="{% url 'bodega_listar' %}" type="button" class="btn btn-danger">Cancelar</a>
+                                <a href="{% url 'operacion_listar' %}" type="button" class="btn btn-danger">Cancelar</a>
                             </div>
                         </div>
                         {% endblock %}

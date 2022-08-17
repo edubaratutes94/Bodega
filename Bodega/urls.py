@@ -14,33 +14,21 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib.auth.decorators import login_required, permission_required
-from notifications import urls as notiURL
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as djangoViews
-from rest_framework.authtoken import views as authviews
 from BodegaApp import views, forms
-from django.conf.urls.static import static
-from rest_framework import routers
-# router = routers.DefaultRouter()
-# from ApiApp import urls
+
 urlpatterns = [
+
+    # ######################## API ###################----------------------------------------------------------------
+    path('api/v1/', include('ApiApp.urls'), name='api'),
+
     path('admin/', admin.site.urls),
     path('i18n/', include('django.conf.urls.i18n')),
     path('accounts/login/', views.loguear, name='ce_login'),
     path('', views.just_login, name='just_login'),
     path('logout/', views.logout, name='logout'),
-    # path('api/', include(router.urls)),
-
-
-    # path('api/auth/', include('rest_framework.urls')),
-
-    ###api####
-
-    # path('api-token-auth/ ', views.obtain_auth_token),
-    # path('register/', views.register_front, name="register_front"),
-    # path('register-by-url/<token>', views.register_by_url, name="register_by_url"),
-    # path('administration', login_required(views.inicio), name="inicio"),
     path('backend/', login_required(views.inicio), name="inicio"),
 
     path('administration/grupo/list', login_required(views.group_list), name="group_list"),
@@ -54,10 +42,10 @@ urlpatterns = [
     path('administration/user/list', login_required(views.user_list), name="user_list"),
     path('administration/user/create', login_required(views.user_create), name='user_create'),
     path('administration/user/update/<int:pk>',
-         permission_required('BodegaApp.change_user', login_url='ce_login')(forms.UserUpdate.as_view()),
+         permission_required('auth.change_user', login_url='ce_login')(forms.UserUpdate.as_view()),
          name='user_update'),
     path('administration/user/delete/<int:pk>/',
-         permission_required('BodegaApp.delete_user', login_url='ce_login')(forms.UserDelete.as_view()),
+         permission_required('auth.delete_user', login_url='ce_login')(forms.UserDelete.as_view()),
          name='user_delete'),
     path('administration/password/update/<int:pk>/', login_required(views.password_update),
          name='password_update'),
@@ -179,15 +167,12 @@ urlpatterns = [
          name="operacion_listar"),
     path('operacion/create', login_required(views.operacion_agregar),
          name="operacion_create"),
-    path('operacion/facturacion', login_required(views.facturacion_agregar),
-         name="facturacion_create"),
+    # path('operacion/facturacion', login_required(views.facturacion_agregar),
+    #      name="facturacion_create"),
     path('operacion/update/<int:pk>', login_required(forms.Update_Operacion.as_view()),
          name="operacion_update"),
     path('operacion/delete/<int:pk>', login_required(forms.Delete_Operacion.as_view()),
          name="operacion_delete"),
 
-    # ######################## API ###################----------------------------------------------------------------
-    path('api/', include('ApiApp.urls'), name='api'),
-    path('api_generate_token/', authviews.obtain_auth_token),
 ]
 

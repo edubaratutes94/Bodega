@@ -5,7 +5,7 @@
 {% block menu_gestion_active %}
     active
 {% endblock %}
-{% block menu_operacion %}
+{% block menu_cierre %}
     active
 {% endblock %}
 {% block wrapper %}
@@ -13,13 +13,13 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0 text-dark">Operación.</h1>
+                    <h1 class="m-0 text-dark">Cierre.</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="{% url 'inicio' %}">Inicio</a></li>
                         {% block group_wrapper %}
-                            <li class="breadcrumb-item active">Operación</li>
+                            <li class="breadcrumb-item active">Cierre</li>
                         {% endblock %}
                     </ol>
                 </div><!-- /.col -->
@@ -34,90 +34,76 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">Listado de Operaciones</h3>
-                        <a href="{% url 'operacion_create' %}" class="btn btn-danger fa-pull-right">
-                            <span class="fa fa-plus"> Nuevo</span>
-
+                        <h3 class="card-title">Listado de Cierres Diarios</h3>
+                        <a href="{% url 'cierre_create' %}" class="btn btn-primary fa-pull-right">
+                            <span class="fa fa-plus"> Cierre del Día</span>
                         </a>
-{#                         <a href="{% url 'facturacion_create' %}" class="btn btn-primary fa-pull-right">#}
-{#                            <span class="fa fa-plus"> Facturación</span>#}
-{##}
-{#                             </a>#}
                     </div>
                     <!-- /.card-header -->
 
                     <div class="card-body">
-                        <table id="example1" class="table table-bordered table-hover table-responsive">
+                        <table id="example1" class="table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th>
                                     Número
                                 </th>
                                 <th>
-                                    Bodega
+                                    Fecha
                                 </th>
                                 <th>
-                                    Fecha
+                                    Bodega
                                 </th>
                                 <th>
                                     Producto
                                 </th>
                                 <th>
-                                    Seccion de Operación
+                                    S/Inicial
                                 </th>
                                 <th>
-                                    Cantidad/Lb
-                                </th>
-                                 <th>
-                                    importe/PC
+                                    S/Final
                                 </th>
                                 <th>
-                                    importe/PV
+                                    S/Total
                                 </th>
-
                                 <th>
                                     Acciones
                                 </th>
-
                             </tr>
                             </thead>
                             <tbody>
-                            {% for u in operacion %}
+                            {% for u in cierre %}
                                     <tr>
                                         <td>
                                             {{ forloop.counter }}
                                         </td>
                                         <td>
-                                            {{ u.bodega }}
+                                            {{ u.fecha_cierre }}
                                         </td>
                                         <td>
-                                            {{ u.fecha }}
+                                            {{ u.bodega.nombre }}
                                         </td>
                                         <td>
-                                            {{ u.producto.nombre }}**{{ u.producto.clasificacion }}
+                                            {{ u.producto.nombre }}
                                         </td>
                                         <td>
-                                            {{ u.seccion_operacion.nombre}}**{{ u.seccion_operacion.tipo_operacion.nombre }}
+                                            {{ u.saldo_inicial}}
                                         </td>
                                         <td>
-                                            {{ u.cantidad}}
+                                             {{ u.saldo_final}}
                                         </td>
                                         <td>
-                                             {{ u.imp_pc}}
+                                             {{ u.saldo_total}}
                                         </td>
-                                        <td>
-                                             {{ u.imp_pv}}
-                                        </td>
-
                                         <td>
 
                                 <span class="input-group-sm">
-{#                                <a href="{% url 'operacion_update' u.pk %}"#}
-{#                                   class="btn btn-sm btn-primary">#}
-{#                                    <i class="fa fa-edit"></i>#}
-{#                                </a>#}
+                                <a href="{% url 'realizar_cierre' u.pk %}"
+                                   class="btn btn-sm btn-primary">
+                                    <i class="fa fa-edit"></i>
+                                </a>
 
-                                <a href="{% url 'operacion_delete' u.pk %}"
+                                <a href="{% url 'cierre_delete' u.pk %}"
                                    class="btn btn-sm btn-danger">
                                     <i class="fa fa-trash"></i>
                                 </a>
@@ -132,27 +118,23 @@
                                     Número
                                 </th>
                                 <th>
-                                    Bodega
+                                    Fecha
                                 </th>
                                 <th>
-                                    Fecha
+                                    Bodega
                                 </th>
                                 <th>
                                     Producto
                                 </th>
                                 <th>
-                                    Seccion de Operación
+                                    S/Inicial
                                 </th>
                                 <th>
-                                    Cantidad/Lb
-                                </th>
-                                 <th>
-                                    importe/PC
+                                    S/Final
                                 </th>
                                 <th>
-                                    importe/PV
+                                    S/Total
                                 </th>
-
                                 <th>
                                     Acciones
                                 </th>

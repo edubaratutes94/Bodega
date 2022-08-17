@@ -1,4 +1,7 @@
+import sqlite3
 import subprocess
+import datetime
+from django.db.models import Sum
 import uuid
 from datetime import date
 from django.contrib import messages
@@ -27,7 +30,6 @@ from notifications import models as models_notify
 from notifications.signals import notify
 from django.shortcuts import redirect
 from BodegaApp import models, forms
-# from BodegaApp.forms import *
 from BodegaApp.utils import register_logs, list_address_db, save_address_dbs
 from django.utils.translation import ugettext_lazy as _
 from BodegaApp.token import account_activation_token
@@ -42,11 +44,20 @@ def just_login(request):
     response.delete_cookie('user_photo')
     return response
 
-# @api_view('GET')
+def Script():
+    conn = sqlite3.connect('bodega.sqlite3')
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM BodegaApp_producto")
+    rows = cur.fetchall()
+    for row in rows:
+        prod = models.Producto.objects.filter(nombre=row[3]).first()
+        if prod.codigo == '':
+            prod.codigo = row[2]
+            prod.save()
+        print(row[1])
+
 def loguear(request):
-    # dir_ip = request.META['REMOTE_ADDR']
-    # dir_ip = request.META['HTTP_X_FORWARDED_FOR']
-    mensage = ''
+    # Script()
     if request.method == 'POST':
         user = request.POST['username']
         passw = request.POST['password']
@@ -500,24 +511,14 @@ def backend_noti_agregar(request):
 
 
 #########################OPERACIONESS@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-@permission_required('BodegaApp.add_operacion')
+# @permission_required('BodegaApp.add_operacion')
 def operacion_listar(request):
     operacion = models.Operacion.objects.order_by("-id")
     return render(request, 'backend/operacion.html', {'operacion': operacion})
 
-# def calcular():
-#     operacion = models.Operacion.objects.all()
-#     if operacion.model.producto_set.all():
-#         x = operacion.cantidad_kg * 2.2
-#         operacion.cantidad_lb = operacion.cantidad_lb + x
-#         operacion.imp_pv = operacion.producto.precio_venta * operacion.cantidad_lb
-#         operacion.imp_pc = operacion.imp_pc * operacion.cantidad_lb
-#         operacion.save()
 
 
-
-# @permission_required('BodegaApp.add_operacion')
-# @permission_required('BodegaApp.add_operacion')
+@permission_required('BodegaApp.add_operacion')
 def operacion_agregar(request):
     operacion = models.Operacion.objects.all()
     if request.POST:
@@ -525,12 +526,15 @@ def operacion_agregar(request):
         if form.is_valid():
             cantidad = form.cleaned_data['cantidad']
             bodega = form.cleaned_data['bodega']
-            precio_costo = form.cleaned_data['precio_costo']
+            # precio_costo = form.cleaned_data['precio_costo']
             producto = form.cleaned_data['producto']
             seccion_operacion = form.cleaned_data['seccion_operacion']
-            operacion = operacion.get_or_create(bodega=bodega, producto=producto, seccion_operacion=seccion_operacion,
-                                                cantidad=cantidad, imp_pv=cantidad * producto.precio_venta,
-                                                imp_pc=cantidad * precio_costo)
+            for costo in models.ProdPrecioCosto.objects.all():
+                if producto.nombre == costo.producto.nombre:
+                    operacion = operacion.create(bodega=bodega, producto=producto,
+                                                        seccion_operacion=seccion_operacion,
+                                                        cantidad=cantidad, imp_pv=cantidad * producto.precio_venta,
+                                                        imp_pc=cantidad * costo.valor)
 
             x = models.Operacion.objects.last()
             register_logs(request, models.Operacion, x.pk, x.__str__(), 1)
@@ -540,32 +544,6 @@ def operacion_agregar(request):
             messages.error(request, "Error en el formulario")
     else:
         form = forms.Form_Operacion()
-    args = {}
-    args['form'] = form
-    return render(request, 'BodegaApp/operacion_form.html', args)
-
-# @permission_required('BodegaApp.add_operacion')
-def facturacion_agregar(request):
-    operacion = models.Operacion.objects.all()
-    if request.POST:
-        form = forms.Form_Operacion1(request.POST)
-        if form.is_valid():
-            cantidad = form.cleaned_data['cantidad']
-            bodega = form.cleaned_data['bodega']
-            precio_costo = form.cleaned_data['precio_costo']
-            producto = form.cleaned_data['producto']
-            seccion_operacion = form.cleaned_data['seccion_operacion']
-            operacion = operacion.get_or_create(bodega=bodega, producto=producto, seccion_operacion=seccion_operacion,
-                                                cantidad=cantidad * 2.2, imp_pv=(cantidad * 2.2) * producto.precio_venta,
-                                                imp_pc=(cantidad * 2.2) * precio_costo)
-            x = models.Operacion.objects.last()
-            register_logs(request, models.Operacion, x.pk, x.__str__(), 1)
-            messages.success(request, "Operación de Facturación creada con éxito")
-            return HttpResponseRedirect('/operacion/list')
-        else:
-            messages.error(request, "Error en el formulario")
-    else:
-        form = forms.Form_Operacion1()
     args = {}
     args['form'] = form
     return render(request, 'BodegaApp/operacion_form.html', args)

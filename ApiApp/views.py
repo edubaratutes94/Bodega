@@ -1,115 +1,67 @@
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from django.contrib.sites.shortcuts import get_current_site
-from django.core.mail import send_mail
-from django.template.loader import render_to_string
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
-from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
-from django.contrib.auth import login as django_login
-from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views.decorators.cache import never_cache
-
-from ApiApp import admin
-from BodegaApp.models import *
-from ApiApp.serializers import *
-from django.views.generic.edit import FormView
-from django.contrib.auth.forms import AuthenticationForm
-####################
-from django.db.models import Avg, Max, Min, Sum
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view, permission_classes, action
-from rest_framework.permissions import AllowAny
-from rest_framework import status, viewsets
-from rest_framework.status import (
-    HTTP_400_BAD_REQUEST,
-    HTTP_404_NOT_FOUND,
-    HTTP_200_OK
-)
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
-#### PRUEBA DE LOGIN#####
+from ApiApp.serializers import *
+from django.contrib.auth import login as django_login
+from BodegaApp.utils import register_logs
 
-class UserViewSet(viewsets.GenericViewSet):
-    queryset = User.objects.filter(is_active=True)
-    serializer_class = UserSerializer
-    # permission_classes = [IsAuthenticated]
-    # authorization_classes = [TokenAuthentication]
-    # Detail define si es una petición de detalle o no, en methods añadimos el método permitido, en nuestro caso solo vamos a permitir post
-    @action(detail=False, methods=['post'])
-    def login(self, request):
-        """User sign in."""
-        serializer = UserLoginSerializer(data=request.data)
+
+class LoginView(APIView):
+
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user, token = serializer.save()
-        data = {
-            'user': UserSerializer(user).data,
-            'access_token': token
-        }
-        if UserApp.objects.filter(pk=user.pk).get().image:
-            image = UserApp.objects.filter(pk=user.pk).get().image
-        return Response(data, status=status.HTTP_201_CREATED )
+        user = serializer.validated_data["user"]
+        register_logs(request, UserApp, "", user.__str__(), 10)
+        django_login(request, user)
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({"key": token.key, "userid": user.id}, status=200)
 
-
-   # Todos los Provincias
-class ProvinciaAllViewSet(viewsets.ModelViewSet):
-    serializer_class = ProvinciaSerializer
-    permission_classes = [IsAuthenticated]
-    authorization_classes = [TokenAuthentication]
-
-    def get_queryset(self):
-        queryset = Provincia.objects.all()
-        return queryset
-
-
-
-    # Todos los municipios
-class MunicipioAllViewSet(viewsets.ModelViewSet):
-    serializer_class = MunicipioSerializer
-    permission_classes = [IsAuthenticated]
-    authorization_classes = [TokenAuthentication]
-
-    def get_queryset(self):
-        uui_prov = self.request.query_params.get('uiid')
-        if uui_prov == None:
-            queryset = Municipio.objects.all()
-        else:
-            queryset = Municipio.objects.filter(provincia__uui=uui_prov).all()
-        return queryset
-
-######BODEGA-- Todos los productos
-
-class BodegaAllProductosViewSet(viewsets.ModelViewSet):
+class ProductosBodega(viewsets.ModelViewSet):
     serializer_class = BodegaProductosSerializer
-    # permission_classes = [IsAuthenticated]
-    authorization_classes = [TokenAuthentication]
-
-    def get_queryset(self):
-        userId = self.request.query_params.get('userid')
-        queryset = ''
-        if userId:
-            queryset = Bodega.objects.filter(user__id=int(userId)).all()
-        return queryset
-
-
-class NotificacionAllViewSet(viewsets.ModelViewSet):
-    serializer_class = NotificacionSerializer
     permission_classes = [IsAuthenticated]
     authorization_classes = [TokenAuthentication]
 
     def get_queryset(self):
-        queryset = Notificacion_general.objects.all()
+        queryset = ''
+        if self.request.user.id:
+            queryset = Bodega.objects.filter(admin__id=self.request.user.id).all()
         return queryset
 
-# class BodegaViewSet(viewsets.ModelViewSet):
-#     # permission_classes = [IsAuthenticated]
-#     authorization_classes = [TokenAuthentication]
-#     serializer_class = BodegaSerializer
-#
-#     def get_queryset(self):
-#         uui_prod = self.request.query_params.get('pk')
-#         queryset = Bodega.objects.filter(productos__pk=uui_prod).aggregate(Sum('productos'))
-#         return queryset
+#NOMENCLADORES Listado-------------------------------------------------------------------------------
+
+class UnidadMedidaList(viewsets.ModelViewSet):
+    serializer_class = UnidadMedidaSerializer
+    permission_classes = [IsAuthenticated]
+    authorization_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        return UnidadMedida.objects.all()
+
+class ClasificacionList(viewsets.ModelViewSet):
+    serializer_class = ClasificacionSerializer
+    permission_classes = [IsAuthenticated]
+    authorization_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        return Clasificacion.objects.all()
+
+class TipoOperacionList(viewsets.ModelViewSet):
+    serializer_class = TipoOperacionSerializer
+    permission_classes = [IsAuthenticated]
+    authorization_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        return TipoOperacion.objects.all()
+
+class SeccionOperacionList(viewsets.ModelViewSet):
+    serializer_class = SeccionOperacionSerializer
+    permission_classes = [IsAuthenticated]
+    authorization_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        return SeccionOperacion.objects.all()
+#--------------------------------------------------------------------------------------------
